@@ -1,22 +1,614 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Values Bit · MIS20070</title>
+    <!-- Bootstrap 5.3 -->
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
-      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
+    <!-- Plotly -->
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" defer></script>
+    <style>
+      :root {
+        --c-black: #1d1616; /* black */
+        --c-maroon: #8e1616; /* maroon */
+        --c-red: #d84040; /* red */
+        --c-light: #eeeeee; /* light grey */
+      }
+      body {
+        background: var(--c-light);
+        color: var(--c-black);
+      }
+      .navbar {
+        background: var(--c-black);
+      }
+      .navbar .navbar-brand {
+        color: #fff;
+      }
+      .navbar .nav-link {
+        color: #fff;
+      }
+      .badge-maroon {
+        background: var(--c-maroon);
+      }
+      .btn-primary {
+        background: var(--c-red);
+        border-color: var(--c-red);
+      }
+      .btn-primary:hover {
+        filter: brightness(0.95);
+      }
+      .card {
+        border: none;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        border-radius: 1rem;
+      }
+      .plot-wrap {
+        aspect-ratio: 16/12;
+      }
+      .form-hint {
+        font-size: 0.9rem;
+        color: #444;
+      }
+      .required::after {
+        content: " *";
+        color: var(--c-red);
+      }
+      footer {
+        color: #fff;
+        background: var(--c-black);
+      }
+      .value-chip {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        border-radius: 999px;
+        background: #fff;
+        border: 1px solid #ddd;
+        margin-right: 0.25rem;
+      }
+    </style>
   </head>
   <body>
-    <h1>Hello World!</h1>
+    <nav class="navbar navbar-expand-lg mb-4">
+      <div class="container">
+        <a class="navbar-brand fw-semibold" href="#">Values Bit · 2075</a>
+        <span class="navbar-text ms-auto small text-white-50"
+          >MIS20070 · Bootstrap</span
+        >
+      </div>
+    </nav>
+
+    <main class="container pb-5">
+      <div class="row g-4 align-items-stretch">
+        <div class="col-lg-7">
+          <div class="card h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-center mb-2">
+                <span class="badge badge-maroon me-2">Step 1</span>
+                <h1 class="h4 m-0">Pick the three values</h1>
+              </div>
+              <p class="form-hint mb-4">
+                Choose three values in tension. These labels will appear at the
+                triangle corners. Example:
+                <span class="value-chip">Economic prosperity</span>
+                <span class="value-chip">Care for others</span>
+                <span class="value-chip">Care for environment</span>.
+              </p>
+              <form id="labelsForm" class="row gy-3">
+                <div class="col-md-4">
+                  <label class="form-label required" for="valA">Value A</label>
+                  <input
+                    class="form-control"
+                    id="valA"
+                    name="valA"
+                    required
+                    value="Economic prosperity"
+                  />
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label required" for="valB">Value B</label>
+                  <input
+                    class="form-control"
+                    id="valB"
+                    name="valB"
+                    required
+                    value="Care for others"
+                  />
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label required" for="valC">Value C</label>
+                  <input
+                    class="form-control"
+                    id="valC"
+                    name="valC"
+                    required
+                    value="Care for environment"
+                  />
+                </div>
+                <div class="col-12 d-flex gap-2">
+                  <button type="submit" class="btn btn-primary">
+                    Apply labels
+                  </button>
+                  <button
+                    type="button"
+                    id="resetPoints"
+                    class="btn btn-outline-dark"
+                  >
+                    Reset my dots
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="card h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-center mb-2">
+                <span class="badge badge-maroon me-2">About</span>
+                <h2 class="h5 m-0">How it works</h2>
+              </div>
+              <ol class="small pe-3">
+                <li>Pick labels for the three values (top-left).</li>
+                <li>
+                  Click once inside each triangle to place your dot (present
+                  &rarr; 2075). Percentages will auto-calc and must sum to 100.
+                </li>
+                <li>
+                  Tick the consent box and submit. One submission per browser is
+                  enforced.
+                </li>
+              </ol>
+              <p class="small mb-0">
+                Design palette: <code>#1D1616</code>, <code>#8E1616</code>,
+                <code>#D84040</code>, <code>#EEEEEE</code>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4 mt-1">
+        <div class="col-lg-6">
+          <div class="card h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-center mb-2">
+                <span class="badge badge-maroon me-2">Plot A</span>
+                <h2 class="h5 m-0">Present-day priorities</h2>
+              </div>
+              <div id="plotCurrent" class="plot-wrap"></div>
+              <div class="row g-2 mt-2">
+                <div class="col-4">
+                  <label class="form-label small" id="lblCurA">Value A</label
+                  ><input class="form-control" id="curA" readonly />
+                </div>
+                <div class="col-4">
+                  <label class="form-label small" id="lblCurB">Value B</label
+                  ><input class="form-control" id="curB" readonly />
+                </div>
+                <div class="col-4">
+                  <label class="form-label small" id="lblCurC">Value C</label
+                  ><input class="form-control" id="curC" readonly />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="card h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-center mb-2">
+                <span class="badge badge-maroon me-2">Plot B</span>
+                <h2 class="h5 m-0">
+                  Priorities in <span id="yearLabel">2075</span>
+                </h2>
+              </div>
+              <div id="plotFuture" class="plot-wrap"></div>
+              <div class="row g-2 mt-2">
+                <div class="col-4">
+                  <label class="form-label small" id="lblFutA">Value A</label
+                  ><input class="form-control" id="futA" readonly />
+                </div>
+                <div class="col-4">
+                  <label class="form-label small" id="lblFutB">Value B</label
+                  ><input class="form-control" id="futB" readonly />
+                </div>
+                <div class="col-4">
+                  <label class="form-label small" id="lblFutC">Value C</label
+                  ><input class="form-control" id="futC" readonly />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <form id="submitForm" class="card mt-4">
+        <div class="card-body">
+          <div class="d-flex align-items-center mb-3">
+            <span class="badge badge-maroon me-2">Submit</span>
+            <h2 class="h5 m-0">Send your response</h2>
+          </div>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="respondent" class="form-label">Name (optional)</label>
+              <input
+                type="text"
+                class="form-control"
+                id="respondent"
+                name="respondent"
+                placeholder="First name only is fine"
+              />
+            </div>
+            <div class="col-md-6">
+              <label for="email" class="form-label"
+                >Email (optional, for follow-up)</label
+              >
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                name="email"
+              />
+            </div>
+            <div class="col-12">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value="1"
+                  id="consent"
+                  required
+                />
+                <label class="form-check-label required" for="consent">
+                  I consent to my anonymised response being stored and used for
+                  this class project.
+                </label>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="alert alert-secondary small" id="endpointHint">
+                This is a demo. Submissions save to your browser and can be
+                exported as CSV. To enable live collection, set
+                <code>SUBMIT_ENDPOINT</code> in the code with your Google Apps
+                Script/endpoint.
+              </div>
+            </div>
+            <div class="col-12 d-flex gap-2">
+              <button type="submit" id="submitBtn" class="btn btn-primary">
+                Submit my response
+              </button>
+              <button type="button" id="exportBtn" class="btn btn-outline-dark">
+                Download my data (CSV)
+              </button>
+            </div>
+            <p class="small text-muted mt-2 mb-0">
+              One submission per browser is enforced. If you need to test again,
+              clear site data for this page.
+            </p>
+          </div>
+        </div>
+      </form>
+    </main>
+
+    <footer class="py-4 mt-5">
+      <div class="container d-flex justify-content-between flex-wrap gap-2">
+        <span class="small"
+          >&copy; <span id="yearNow"></span> MIS20070 · Values Bit</span
+        >
+        <span class="small"
+          >Palette:
+          <span
+            style="
+              color: #fff;
+              background: #1d1616;
+              padding: 0.15rem 0.35rem;
+              border-radius: 0.25rem;
+            "
+            >#1D1616</span
+          >
+          <span
+            style="
+              color: #fff;
+              background: #8e1616;
+              padding: 0.15rem 0.35rem;
+              border-radius: 0.25rem;
+            "
+            >#8E1616</span
+          >
+          <span
+            style="
+              color: #fff;
+              background: #d84040;
+              padding: 0.15rem 0.35rem;
+              border-radius: 0.25rem;
+            "
+            >#D84040</span
+          >
+          <span
+            style="
+              color: #000;
+              background: #eeeeee;
+              padding: 0.15rem 0.35rem;
+              border-radius: 0.25rem;
+            "
+            >#EEEEEE</span
+          ></span
+        >
+      </div>
+    </footer>
+
+    <script>
+      // === Config ===
+      const YEAR_TARGET = 2075;
+      const STORAGE_KEY = "valuesbit_v1_submitted";
+      const LOCAL_DATA_KEY = "valuesbit_v1_localdata";
+      // If you later add an endpoint (e.g., Google Apps Script web app), paste the URL here.
+      const SUBMIT_ENDPOINT = "";
+
+      // === Utilities ===
+      const byId = (id) => document.getElementById(id);
+      const fmt = (n) => (Math.round(n * 10) / 10).toFixed(1) + "%";
+      const nowIso = () => new Date().toISOString();
+      const uid = () =>
+        ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
+          (
+            c ^
+            (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
+          ).toString(16)
+        );
+
+      // === Labels state ===
+      const labels = {
+        A: "Economic prosperity",
+        B: "Care for others",
+        C: "Care for environment",
+      };
+
+      function applyLabelsToUI() {
+        byId("lblCurA").textContent = labels.A;
+        byId("lblCurB").textContent = labels.B;
+        byId("lblCurC").textContent = labels.C;
+        byId("lblFutA").textContent = labels.A;
+        byId("lblFutB").textContent = labels.B;
+        byId("lblFutC").textContent = labels.C;
+        buildPlots();
+      }
+
+      // === Plotly ternary templates ===
+      let currentPoint = null; // {a,b,c}
+      let futurePoint = null; // {a,b,c}
+
+      function buildPlots() {
+        const layoutBase = {
+          height: undefined, // responsive via responsive:true
+          ternary: {
+            sum: 100,
+            aaxis: {
+              title: labels.A,
+              min: 0.01,
+              linewidth: 1,
+              ticksuffix: "%",
+              color: "#1D1616",
+            },
+            baxis: {
+              title: labels.B,
+              min: 0.01,
+              linewidth: 1,
+              ticksuffix: "%",
+              color: "#1D1616",
+            },
+            caxis: {
+              title: labels.C,
+              min: 0.01,
+              linewidth: 1,
+              ticksuffix: "%",
+              color: "#1D1616",
+            },
+            bgcolor: "#EEEEEE",
+          },
+          margin: { l: 30, r: 30, t: 10, b: 0 },
+          paper_bgcolor: "#EEEEEE",
+          plot_bgcolor: "#EEEEEE",
+          showlegend: false,
+        };
+
+        const makeTrace = (pt) => ({
+          type: "scatterternary",
+          mode: pt ? "markers" : "none",
+          a: pt ? [pt.a] : [],
+          b: pt ? [pt.b] : [],
+          c: pt ? [pt.c] : [],
+          marker: {
+            size: 12,
+            color: "#D84040",
+            line: { width: 1, color: "#1D1616" },
+          },
+        });
+
+        Plotly.newPlot(
+          "plotCurrent",
+          [makeTrace(currentPoint)],
+          {
+            ...layoutBase,
+            responsive: true,
+          },
+          { displayModeBar: false }
+        );
+
+        Plotly.newPlot(
+          "plotFuture",
+          [makeTrace(futurePoint)],
+          {
+            ...layoutBase,
+            responsive: true,
+          },
+          { displayModeBar: false }
+        );
+
+        // Attach click handlers once per rebuild
+        byId("plotCurrent").on("plotly_click", (d) => {
+          const p = d.points?.[0];
+          if (!p) return;
+          if (currentPoint) return; // one dot only
+          currentPoint = { a: p.a, b: p.b, c: p.c };
+          updatePointUI("cur", currentPoint);
+          Plotly.react("plotCurrent", [makeTrace(currentPoint)]);
+        });
+        byId("plotFuture").on("plotly_click", (d) => {
+          const p = d.points?.[0];
+          if (!p) return;
+          if (futurePoint) return; // one dot only
+          futurePoint = { a: p.a, b: p.b, c: p.c };
+          updatePointUI("fut", futurePoint);
+          Plotly.react("plotFuture", [makeTrace(futurePoint)]);
+        });
+      }
+
+      function updatePointUI(prefix, pt) {
+        byId(prefix + "A").value = fmt(pt.a);
+        byId(prefix + "B").value = fmt(pt.b);
+        byId(prefix + "C").value = fmt(pt.c);
+      }
+
+      function resetPoints() {
+        currentPoint = null;
+        futurePoint = null;
+        ["curA", "curB", "curC", "futA", "futB", "futC"].forEach(
+          (id) => (byId(id).value = "")
+        );
+        buildPlots();
+      }
+
+      // === Submission ===
+      function hasSubmitted() {
+        return localStorage.getItem(STORAGE_KEY) === "1";
+      }
+      function markSubmitted() {
+        localStorage.setItem(STORAGE_KEY, "1");
+      }
+
+      function saveLocalRow(row) {
+        const existing = JSON.parse(
+          localStorage.getItem(LOCAL_DATA_KEY) || "[]"
+        );
+        existing.push(row);
+        localStorage.setItem(LOCAL_DATA_KEY, JSON.stringify(existing));
+      }
+
+      async function submitData(e) {
+        e.preventDefault();
+        if (hasSubmitted()) {
+          alert("You have already submitted from this browser. Thank you!");
+          return;
+        }
+        if (!currentPoint || !futurePoint) {
+          alert("Please click once inside each triangle to place your dots.");
+          return;
+        }
+        const row = {
+          id: uid(),
+          timestamp: nowIso(),
+          labelsA: labels.A,
+          labelsB: labels.B,
+          labelsC: labels.C,
+          curA: currentPoint.a,
+          curB: currentPoint.b,
+          curC: currentPoint.c,
+          futA: futurePoint.a,
+          futB: futurePoint.b,
+          futC: futurePoint.c,
+          respondent: byId("respondent").value || "",
+          email: byId("email").value || "",
+          userAgent: navigator.userAgent,
+        };
+
+        // Local save first (for safety/demo)
+        saveLocalRow(row);
+
+        // Optional remote submit
+        if (SUBMIT_ENDPOINT) {
+          try {
+            const res = await fetch(SUBMIT_ENDPOINT, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(row),
+            });
+            if (!res.ok) throw new Error("Bad response");
+          } catch (err) {
+            console.warn("Remote submit failed:", err);
+          }
+        }
+
+        markSubmitted();
+        byId("submitBtn").disabled = true;
+        alert("Thanks! Your response has been recorded.");
+      }
+
+      function exportCSV() {
+        const rows = JSON.parse(localStorage.getItem(LOCAL_DATA_KEY) || "[]");
+        if (!rows.length) {
+          alert("No local records to export yet.");
+          return;
+        }
+        const header = Object.keys(rows[0]);
+        const csv = [header.join(",")]
+          .concat(
+            rows.map((r) =>
+              header.map((k) => JSON.stringify(r[k] ?? "")).join(",")
+            )
+          )
+          .join("\n");
+        const blob = new Blob([csv], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "valuesbit_responses.csv";
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+
+      // === DOM Ready ===
+      window.addEventListener("DOMContentLoaded", () => {
+        byId("yearNow").textContent = new Date().getFullYear();
+        byId("yearLabel").textContent = YEAR_TARGET;
+
+        // Prefill labels from inputs
+        labels.A = byId("valA").value;
+        labels.B = byId("valB").value;
+        labels.C = byId("valC").value;
+        applyLabelsToUI();
+
+        byId("labelsForm").addEventListener("submit", (e) => {
+          e.preventDefault();
+          labels.A = byId("valA").value.trim() || "Value A";
+          labels.B = byId("valB").value.trim() || "Value B";
+          labels.C = byId("valC").value.trim() || "Value C";
+          resetPoints();
+          applyLabelsToUI();
+        });
+        byId("resetPoints").addEventListener("click", resetPoints);
+
+        byId("submitForm").addEventListener("submit", submitData);
+        byId("exportBtn").addEventListener("click", exportCSV);
+
+        if (SUBMIT_ENDPOINT) {
+          byId("endpointHint").classList.add("d-none");
+        }
+        if (hasSubmitted()) {
+          byId("submitBtn").disabled = true;
+        }
+      });
+    </script>
+
     <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
   </body>
